@@ -101,10 +101,12 @@ func main() {
 
 		if len(fromQuery) != 1 {
 			fmt.Printf("%s - invalid result match for %s. must be exactly 1 match", crd.FileUrl, crd.MergeFrom)
+			continue
 		}
 
 		if len(toQuery) != 1 {
 			fmt.Printf("%s - invalid result match for %s. must be exactly 1 match", crd.FileUrl, crd.MergeAt)
+			continue
 		}
 
 		found := false
