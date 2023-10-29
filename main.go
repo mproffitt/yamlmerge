@@ -63,16 +63,25 @@ func main() {
 	for _, crd := range cfg.Crds {
 		// TODO: quick and dirty replace. should use go-template
 		crd.FileUrl = strings.Replace(crd.FileUrl, "{{ .Version }}", crd.Version, 1)
-		if yamlFile, err = readUrl(crd.FileUrl); err != nil {
-			log.Printf("unable to read CRD URL %s  err  #%v \n", crd.FileUrl, err)
-			continue
+		if !strings.HasPrefix(crd.FileUrl, "http") {
+			if yamlFile, err = os.ReadFile(crd.FileUrl); err != nil {
+				fmt.Printf("unable to open %s err   #%v \n", cfg.Template, err)
+				continue
+			}
+		} else {
+			if yamlFile, err = readUrl(crd.FileUrl); err != nil {
+				log.Printf("unable to read CRD URL %s  err  #%v \n", crd.FileUrl, err)
+				continue
+			}
 		}
 
 		var (
 			node               yaml.Node
 			fromPath, toPath   *yamlpath.Path
 			fromQuery, toQuery []*yaml.Node
+			mergeKey           string = crd.MergeAt[strings.LastIndex(crd.MergeAt, ".")+1:]
 		)
+		crd.MergeAt = crd.MergeAt[:strings.LastIndex(crd.MergeAt, ".")]
 
 		if err = yaml.Unmarshal(yamlFile, &node); err != nil {
 			fmt.Println(err)
@@ -116,7 +125,7 @@ func main() {
 				continue
 			}
 			switch node.Value {
-			case "properties":
+			case mergeKey:
 				toQuery[0].Content[i+1] = fromQuery[0]
 				found = true
 			}
@@ -124,7 +133,7 @@ func main() {
 
 		if !found {
 			var key yaml.Node
-			key.SetString("properties")
+			key.SetString(mergeKey)
 			toQuery[0].Content = append(toQuery[0].Content, &key, fromQuery[0])
 		}
 	}

@@ -21,19 +21,19 @@ Example:
 ```yaml
 template: ./xrd/definition.yaml
 crds:
-  - mergeAt: .spec.versions[0].schema.openAPIV3Schema.properties.status.properties.aws.properties.cluster
+  - mergeAt: .spec.versions[0].schema.openAPIV3Schema.properties.status.properties.aws.properties.cluster.properties
     mergeFrom: .spec.versions[0].schema.openAPIV3Schema.properties.status.properties.atProvider.properties
     fileUrl: "https://raw.githubusercontent.com/upbound/provider-aws/{{ .Version }}/package/crds/eks.aws.upbound.io_clusters.yaml"
     version: v0.43.0
-  - mergeAt: .spec.versions[0].schema.openAPIV3Schema.properties.status.properties.aws.properties.vpc
+  - mergeAt: .spec.versions[0].schema.openAPIV3Schema.properties.status.properties.aws.properties.vpc.properties
     mergeFrom: .spec.versions[0].schema.openAPIV3Schema.properties.status.properties.atProvider.properties
     fileUrl: "https://raw.githubusercontent.com/upbound/provider-aws/{{ .Version }}/package/crds/ec2.aws.upbound.io_vpcs.yaml"
     version: v0.43.0
-  - mergeAt: .spec.versions[0].schema.openAPIV3Schema.properties.status.properties.azure.properties.cluster
+  - mergeAt: .spec.versions[0].schema.openAPIV3Schema.properties.status.properties.azure.properties.cluster.properties
     mergeFrom: .spec.versions[0].schema.openAPIV3Schema.properties.status.properties.atProvider.properties
     fileUrl: "https://raw.githubusercontent.com/upbound/provider-azure/{{ .Version }}/package/crds/containerservice.azure.upbound.io_kubernetesclusters.yaml"
     version: v0.38.0
-  - mergeAt: .spec.versions[0].schema.openAPIV3Schema.properties.status.properties.gcp.properties.cluster
+  - mergeAt: .spec.versions[0].schema.openAPIV3Schema.properties.status.properties.gcp.properties.cluster.properties
     mergeFrom: .spec.versions[0].schema.openAPIV3Schema.properties.status.properties.atProvider.properties
     fileUrl: "https://raw.githubusercontent.com/upbound/provider-gcp//{{ .Version }}/package/crds/container.gcp.upbound.io_clusters.yaml"
     version: v0.38.0
@@ -72,4 +72,4 @@ status:
             ...
 ```
 
-The key `properties` is inserted if it does not exist, otherwise it is replaced.
+TODO: recursive merge
